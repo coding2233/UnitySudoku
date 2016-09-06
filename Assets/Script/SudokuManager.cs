@@ -18,6 +18,11 @@ public class SudokuManager : MonoBehaviour {
 
     GameObject _LastSudokuBtn=null;
 
+    void Awake()
+    {
+        Screen.SetResolution(1280, 720, true);
+    }
+
     // Use this for initialization
     void Start() {
         InitSudokuItem();
@@ -29,10 +34,17 @@ public class SudokuManager : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         fTime += Time.fixedDeltaTime;
-        _TimeText.text = (int)(fTime/60)+"m "+(int)(fTime%60)+"s";
+        if ((int)(fTime / 60) > 0)
+        {
+            _TimeText.text = (int)(fTime / 60) + "minutes\n" + (int)(fTime % 60) + "seconds";
+        }
+        else
+        {
+            _TimeText.text = (int)(fTime % 60) + "seconds";
+        }
+        
     }
-
-
+    
     void AddListener()
     {
         Button[] BtnKids = _SudokuNumberPanel.GetComponentsInChildren<Button>();
@@ -97,7 +109,17 @@ public class SudokuManager : MonoBehaviour {
 
     void ClickSudokuItem(GameObject go)
     {
-        _SudokuNumberPanel.transform.position = Input.mousePosition;
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.touchCount > 0)
+            {
+                _SudokuNumberPanel.transform.position = Input.GetTouch(0).position;
+            }
+        }
+        else
+        {
+            _SudokuNumberPanel.transform.position = Input.mousePosition;
+        }
         _SudokuNumberPanel.SetActive(true);
         _LastSudokuBtn = go;
     }

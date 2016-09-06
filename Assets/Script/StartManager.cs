@@ -5,7 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class StartManager : MonoBehaviour {
 
-    public GameObject MenuPanel; 
+    public GameObject MenuPanel;
+
+    void Awake()
+    {
+        Screen.SetResolution(1280, 720, true);
+    }
 
 	// Use this for initialization
 	void Start () {
