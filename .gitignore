@@ -27,3 +27,12 @@
 *.exe
 *.out
 *.app
+
+
+/.vs
+/Library
+/ProjectSettings
+/Temp
+*.csproj
+*.sln
+*.suo
