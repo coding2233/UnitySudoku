@@ -16,13 +16,17 @@ public class SudokuManager : MonoBehaviour {
 
     public Button[] _ArrayMenuBtn;
 
+    public Text _HintText;
+
+    public GameObject _GameOverPanel;
+
     SudokuInfor[,] _SudokuInfor;
     GameObject[,] _SudokuItemInfor;
 
     int[,] _OldSudokuInfor;
     int _SudokuLength = 9;
-    
-    GameObject _LastSudokuBtn=null;
+
+    GameObject _LastSudokuBtn = null;
 
     GameObject[] _ArraySudokuItem;
 
@@ -47,7 +51,13 @@ public class SudokuManager : MonoBehaviour {
 
         _TimeText.text = "";
         _StepText.text = "0steps\n0%";
-       
+
+        if (MagicStaticValue.GetInstance()._HintCount > 0)
+            _HintText.text = "+" + MagicStaticValue.GetInstance()._HintCount;
+        else
+            _HintText.text = "";
+
+
         _SudokuNumberPanel.SetActive(false);
 
         InitSudokuItem();
@@ -100,6 +110,8 @@ public class SudokuManager : MonoBehaviour {
                 break;
 
             case "1_Button":
+                if (_GameOverPanel.activeSelf)
+                    _GameOverPanel.SetActive(false);
                 Init();
                 break;
 
@@ -113,7 +125,7 @@ public class SudokuManager : MonoBehaviour {
 
             default:
                 break;
-        } 
+        }
     }
     #endregion
 
@@ -129,7 +141,7 @@ public class SudokuManager : MonoBehaviour {
     {
         if (SudokuFactory.GetInstance().listSudoku.Count <= 0)
             return;
-        
+
         _SudokuInfor = SudokuFactory.GetInstance().listSudoku[0];
 
         _OldSudokuInfor = new int[_SudokuLength, _SudokuLength];
@@ -250,7 +262,7 @@ public class SudokuManager : MonoBehaviour {
 
     #region 点击数字
     int _iSteps = 0;
-    float _fPercent=0.0f;
+    float _fPercent = 0.0f;
     void ClickSudokuNumber(GameObject go)
     {
         if (_LastSudokuBtn == null)
@@ -269,19 +281,26 @@ public class SudokuManager : MonoBehaviour {
         _SudokuNumberPanel.SetActive(false);
 
         _iSteps++;
-        _fPercent = CheckFinish()*100.0f;
+        _fPercent = CheckFinish() * 100.0f;
 
         _StepText.text = _iSteps + "steps\n" + (int)_fPercent + "%";
+
+        _LastSudokuBtn = null;
+
+        if ((int)(_fPercent) == 100)
+        {
+            ShowGameOverPanel();
+        }
     }
     #endregion
 
     #region 检查当前数字是否符合要求
-    bool CheckNumber(int X,int Y,int iNumber)
+    bool CheckNumber(int X, int Y, int iNumber)
     {
         if (_SudokuInfor == null)
             return false;
 
-        SudokuInfor tempSudoku= _SudokuInfor[X, Y];
+        SudokuInfor tempSudoku = _SudokuInfor[X, Y];
         for (int i = 0; i < 9; i++)
         {
             Vector2 tempVec2 = tempSudoku.array01[i];
@@ -318,32 +337,33 @@ public class SudokuManager : MonoBehaviour {
         if (_ArraySudokuItem.Length <= 0)
             return 0.0f;
 
-        float index =0.0f;
+        float index = 0.0f;
 
         for (int i = 0; i < _ArraySudokuItem.Length; i++)
         {
             ItemIndex tempItem = _ArraySudokuItem[i].GetComponent<ItemIndex>();
 
-            if (_SudokuInfor[tempItem.X,tempItem.Y].Num!=0&&!tempItem.isRotation
+            if (_SudokuInfor[tempItem.X, tempItem.Y].Num != 0 && !tempItem.isRotation
                 && _ArraySudokuItem[i].transform.FindChild("Text").GetComponent<Text>().text != "")
             {
                 index++;
             }
         }
 
-        return index/ (float)_ArraySudokuItem.Length;
+        return index / (float)_ArraySudokuItem.Length;
     }
     #endregion
 
     #region 数独提示
     void HintSudoku()
     {
-        if (_LastSudokuBtn==null|| _OldSudokuInfor==null)
+        if (_LastSudokuBtn == null || _OldSudokuInfor == null
+            || MagicStaticValue.GetInstance()._HintCount <= 0)
             return;
 
         Text tempText = _LastSudokuBtn.transform.FindChild("Text").GetComponent<Text>();
         ItemIndex tempItem = _LastSudokuBtn.GetComponent<ItemIndex>();
-        if (tempText.text == ""|| tempItem.isRotation)
+        if (tempText.text == "" || tempItem.isRotation)
         {
             Debug.Log(tempItem.X + "  " + tempItem.Y);
             tempText.text = _OldSudokuInfor[tempItem.X, tempItem.Y].ToString();
@@ -354,6 +374,25 @@ public class SudokuManager : MonoBehaviour {
         }
 
         _SudokuNumberPanel.SetActive(false);
+
+        MagicStaticValue.GetInstance()._HintCount--;
+
+        if (MagicStaticValue.GetInstance()._HintCount > 0)
+            _HintText.text = "+" + MagicStaticValue.GetInstance()._HintCount;
+        else
+        {
+            MagicStaticValue.GetInstance()._HintCount = 0;
+            _HintText.text = "";
+        }
     }
     #endregion
+
+    #region 显示结果面板
+    void ShowGameOverPanel()
+    {
+        _GameOverPanel.transform.FindChild("ScoreText").GetComponent<Text>().text = (int)(fTime / 60) + "minutes" + (int)(fTime % 60) + "seconds\n"+_iSteps + "steps";
+        _GameOverPanel.SetActive(true);
+    }
+    #endregion
+
 }
