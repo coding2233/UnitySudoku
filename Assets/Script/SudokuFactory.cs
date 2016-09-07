@@ -250,8 +250,11 @@ public class SudokuFactory {
         else
         {
             //添加数独到列表中
-            listSudoku.Add(arrayInfor);
-            Debug.Log("计算成功,回溯次数:" + (CalcCout + 1));
+            if (CheckSudoku())
+            {
+                listSudoku.Add(arrayInfor);
+                Debug.Log("计算成功,回溯次数:" + (CalcCout + 1));
+            }
         }
 
     }
@@ -274,6 +277,40 @@ public class SudokuFactory {
     //        }
     //    }
     //}
+    #endregion
+
+    #region 最终检查数独是否正确
+    bool CheckSudoku()
+    {
+        for (int i = 0; i < ArrayCout; i++)
+        {
+            for (int j = 0; j < ArrayCout; j++)
+            {
+                for (int m = 0; m < 9; m++)
+                {
+                    Vector2 tempVec2 = arrayInfor[i, j].array01[m];
+                    SudokuInfor tempInfor = arrayInfor[(int)tempVec2.x, (int)tempVec2.y];
+                    if (arrayInfor[i, j].Num == tempInfor.Num
+                        && arrayInfor[i, j]!= tempInfor)
+                        return false;
+
+                    tempVec2 = arrayInfor[i, j].array02[m];
+                    tempInfor = arrayInfor[(int)tempVec2.x, (int)tempVec2.y];
+                    if (arrayInfor[i, j].Num == tempInfor.Num
+                        && arrayInfor[i, j] != tempInfor)
+                        return false;
+
+                    tempVec2 = arrayInfor[i, j].array03[m];
+                    tempInfor = arrayInfor[(int)tempVec2.x, (int)tempVec2.y];
+                    if (arrayInfor[i, j].Num == tempInfor.Num
+                        && arrayInfor[i, j] != tempInfor)
+                        return false;
+                }
+            }
+        }
+
+        return true;
+    }
     #endregion
 
 }

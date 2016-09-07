@@ -6,10 +6,12 @@ using UnityEngine.SceneManagement;
 public class StartManager : MonoBehaviour {
 
     public GameObject MenuPanel;
+    public GameObject LoadText;
+    public Animator MenuAnim;
 
     void Awake()
     {
-        Screen.SetResolution(1280, 720, true);
+        Screen.SetResolution(1280, 720, false);
     }
 
 	// Use this for initialization
@@ -55,6 +57,13 @@ public class StartManager : MonoBehaviour {
             default:
                 break;
         }
+        MenuAnim.SetBool("IsStart", true);
+        Invoke("OpenScene", 2.5f);
+    }
+
+    void OpenScene()
+    {
+        LoadText.SetActive(true);
         SceneManager.LoadScene("Play");
     }
 }
