@@ -9,6 +9,8 @@ public class StartManager : MonoBehaviour {
     public GameObject LoadText;
     public Animator MenuAnim;
 
+    public AudioSource _AudioSource;
+
     void Awake()
     {
         Screen.SetResolution(1280, 720, false);
@@ -36,6 +38,9 @@ public class StartManager : MonoBehaviour {
 
     void ClickMenuBtn(GameObject go)
     {
+        if (!_AudioSource.isPlaying)
+            _AudioSource.Play();
+
         switch (go.name)
         {
             case "0_Button":

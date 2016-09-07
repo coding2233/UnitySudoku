@@ -20,6 +20,9 @@ public class SudokuManager : MonoBehaviour {
 
     public GameObject _GameOverPanel;
 
+    public AudioSource _AudioSource;
+    public AudioSource _PassAudioSource;
+
     SudokuInfor[,] _SudokuInfor;
     GameObject[,] _SudokuItemInfor;
 
@@ -113,6 +116,9 @@ public class SudokuManager : MonoBehaviour {
     #region 点击菜单按钮
     void ClickMenuBtn(GameObject go)
     {
+        if (!_AudioSource.isPlaying)
+            _AudioSource.Play();
+
         switch (go.name)
         {
             case "0_Button":
@@ -254,6 +260,9 @@ public class SudokuManager : MonoBehaviour {
     #region 点击数独空格
     void ClickSudokuItem(GameObject go)
     {
+        if (!_AudioSource.isPlaying)
+            _AudioSource.Play();
+
         if (Application.platform == RuntimePlatform.Android)
         {
             if (Input.touchCount > 0)
@@ -275,6 +284,9 @@ public class SudokuManager : MonoBehaviour {
     float _fPercent = 0.0f;
     void ClickSudokuNumber(GameObject go)
     {
+        if(!_AudioSource.isPlaying)
+            _AudioSource.Play();
+
         if (_LastSudokuBtn == null)
             return;
 
@@ -286,7 +298,10 @@ public class SudokuManager : MonoBehaviour {
         if (CheckNumber(tempItemIndex.X, tempItemIndex.Y, int.Parse(go.name.Trim())))
             tempItemIndex.isRotation = false;
         else
+        {
+            _SudokuInfor[tempItemIndex.X, tempItemIndex.Y].Num=0;
             tempItemIndex.isRotation = true;
+        }
 
         _SudokuNumberPanel.SetActive(false);
 
@@ -372,6 +387,9 @@ public class SudokuManager : MonoBehaviour {
             return;
 
         Text tempText = _LastSudokuBtn.transform.FindChild("Text").GetComponent<Text>();
+        if (tempText.color == Color.white / 2.0f && tempText.text != "")
+            return;
+
         ItemIndex tempItem = _LastSudokuBtn.GetComponent<ItemIndex>();
         if (tempText.text == "" || tempItem.isRotation)
         {
@@ -400,6 +418,7 @@ public class SudokuManager : MonoBehaviour {
     #region 显示结果面板
     void ShowGameOverPanel()
     {
+        _PassAudioSource.Play();
         _GameOverPanel.transform.FindChild("ScoreText").GetComponent<Text>().text = (int)(fTime / 60) + "minutes" + (int)(fTime % 60) + "seconds\n"+_iSteps + "steps";
         _GameOverPanel.SetActive(true);
     }
