@@ -64,9 +64,18 @@ public class SudokuManager : MonoBehaviour {
     }
     #endregion
 
-    float fTime = 0.0f;
+    
     // Update is called once per frame
     void Update() {
+        CountTime();
+    }
+
+    #region 计时函数 在Update更新
+    float fTime = 0.0f;
+    void CountTime()
+    {
+        if (_GameOverPanel.activeSelf)
+            return;
 
         //计时
         fTime += Time.deltaTime;
@@ -79,6 +88,7 @@ public class SudokuManager : MonoBehaviour {
             _TimeText.text = (int)(fTime % 60) + "seconds";
         }
     }
+    #endregion
 
     #region 添加监听
     void AddListener()
