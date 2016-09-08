@@ -27,6 +27,7 @@ public class ShotScreenShare : MonoBehaviour {
 
     void OnEnable()
     {
+        ShareButton.gameObject.SetActive(false);
         Invoke("GetTexture",2.0f);
     }
 
@@ -50,7 +51,6 @@ public class ShotScreenShare : MonoBehaviour {
 
     IEnumerator GetTexShare()
     {
-        ShareButton.gameObject.SetActive(false);
         _Path = Application.persistentDataPath + "/shotscreen.png";
 
         yield return new WaitForEndOfFrame();
