@@ -13,8 +13,11 @@ public class SudokuManager : MonoBehaviour {
     public GameObject _SudokuNumberPanel;
     public Text _TimeText;
     public Text _StepText;
+    public Text _TitleText;
 
     public Button[] _ArrayMenuBtn;
+
+    public Sprite[] _ArrayBg;
 
     public Text _HintText;
 
@@ -35,11 +38,12 @@ public class SudokuManager : MonoBehaviour {
 
     void Awake()
     {
-        Screen.SetResolution(1280, 720, false);
+       // Screen.SetResolution(1280, 720, false);
     }
 
     // Use this for initialization
     void Start() {
+        _SudokuPanel.GetComponent<Image>().sprite = _ArrayBg[Random.Range(0, _ArrayBg.Length)];
         Init();
         AddListener();
     }
@@ -54,6 +58,29 @@ public class SudokuManager : MonoBehaviour {
 
         _TimeText.text = "";
         _StepText.text = "0steps\n0%";
+        switch (MagicStaticValue.GetInstance()._Level)
+        {
+            case 30:
+                _TitleText.text = "Easy";
+                break;
+            case 40:
+                _TitleText.text = "Normal";
+                break;
+            case 50:
+                _TitleText.text = "Hard";
+                break;
+            case 60:
+                _TitleText.text = "Crazy";
+                break;
+            case 70:
+                _TitleText.text = "Burn Brain";
+                break;
+
+            default:
+                _TitleText.text = "";
+                break;
+        }
+        
 
         if (MagicStaticValue.GetInstance()._HintCount > 0)
             _HintText.text = "+" + MagicStaticValue.GetInstance()._HintCount;
@@ -423,5 +450,5 @@ public class SudokuManager : MonoBehaviour {
         _GameOverPanel.SetActive(true);
     }
     #endregion
-
+    
 }

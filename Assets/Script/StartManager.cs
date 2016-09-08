@@ -63,7 +63,7 @@ public class StartManager : MonoBehaviour {
                 break;
         }
         MenuAnim.SetBool("IsStart", true);
-        Invoke("OpenScene", 2.5f);
+        Invoke("OpenScene", 3.2f);
     }
 
     void OpenScene()
