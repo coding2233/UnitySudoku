@@ -36,9 +36,52 @@ public class SudokuManager : MonoBehaviour {
 
     GameObject[] _ArraySudokuItem;
 
+    #region 设置屏幕分辨率
+    private int scaleWidth = 0;
+    private int scaleHeight = 0;
+    void setDesignContentScale()
+    {
+        if (scaleWidth == 0 && scaleHeight == 0)
+        {
+            int width = Screen.currentResolution.width;
+            int height = Screen.currentResolution.height;
+            int designWidth = 1280;
+            int designHeight = 720;
+            float s1 = (float)designWidth / (float)designHeight;
+            float s2 = (float)width / (float)height;
+            if (s1 < s2)
+            {
+                designWidth = (int)Mathf.FloorToInt(designHeight * s2);
+            }
+            else if (s1 > s2)
+            {
+                designHeight = (int)Mathf.FloorToInt(designWidth / s2);
+            }
+            float contentScale = (float)designWidth / (float)width;
+            if (contentScale < 1.0f)
+            {
+                scaleWidth = designWidth;
+                scaleHeight = designHeight;
+            }
+        }
+        if (scaleWidth > 0 && scaleHeight > 0)
+        {
+            if (scaleWidth % 2 == 0)
+            {
+                scaleWidth += 1;
+            }
+            else {
+                scaleWidth -= 1;
+            }
+            Screen.SetResolution(scaleWidth, scaleHeight, true);
+        }
+    }
+    #endregion
+
     void Awake()
     {
-       // Screen.SetResolution(1280, 720, false);
+        // Screen.SetResolution(1280, 720, false);
+        setDesignContentScale();
     }
 
     // Use this for initialization
