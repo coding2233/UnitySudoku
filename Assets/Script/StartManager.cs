@@ -82,7 +82,7 @@ public class StartManager : MonoBehaviour {
     {
         if (!_AudioSource.isPlaying)
             _AudioSource.Play();
-
+        MagicStaticValue.GetInstance()._HintCount = 10;
         switch (go.name)
         {
             case "0_Button":
