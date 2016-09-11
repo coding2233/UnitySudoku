@@ -31,7 +31,6 @@
 
 /.vs
 /Library
-/ProjectSettings
 /Temp
 *.csproj
 *.sln

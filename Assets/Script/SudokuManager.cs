@@ -11,6 +11,10 @@ public class SudokuManager : MonoBehaviour {
     public GameObject _SudokuPanel;
 
     public GameObject _SudokuNumberPanel;
+    public GameObject _SurePanel;
+    private Color _YesColor=Color.black;
+    private Color _NoColor = Color.white / 2.0f;
+
     public Text _TimeText;
     public Text _StepText;
     public Text _TitleText;
@@ -180,6 +184,13 @@ public class SudokuManager : MonoBehaviour {
             GameObject go = _ArrayMenuBtn[i].gameObject;
             _ArrayMenuBtn[i].onClick.AddListener(delegate () { ClickMenuBtn(go); });
         }
+
+        Button tempBtnYes = _SurePanel.transform.FindChild("Yes").GetComponent<Button>();
+        //_YesColor = tempBtnYes.GetComponent<Image>().color;
+        tempBtnYes.onClick.AddListener(delegate () { ClickSureBtn(tempBtnYes.gameObject); });
+        Button tempBtnNo = _SurePanel.transform.FindChild("No").GetComponent<Button>();
+        //_NoColor = tempBtnNo.GetComponent<Image>().color;
+        tempBtnNo.onClick.AddListener(delegate () { ClickSureBtn(tempBtnNo.gameObject); });
     }
     #endregion
 
@@ -219,6 +230,7 @@ public class SudokuManager : MonoBehaviour {
     void ClickBgPanel()
     {
         _SudokuNumberPanel.SetActive(false);
+        _SurePanel.SetActive(false);
     }
     #endregion
 
@@ -333,19 +345,46 @@ public class SudokuManager : MonoBehaviour {
         if (!_AudioSource.isPlaying)
             _AudioSource.Play();
 
-        if (Application.platform == RuntimePlatform.Android)
+        _SudokuNumberPanel.SetActive(false);
+        _SurePanel.SetActive(false);
+
+        if (Application.platform == RuntimePlatform.Android
+            ||Application.platform==RuntimePlatform.IPhonePlayer)
         {
             if (Input.touchCount > 0)
             {
                 _SudokuNumberPanel.transform.position = Input.GetTouch(0).position;
+                _SurePanel.transform.position = Input.GetTouch(0).position;
             }
         }
         else
         {
             _SudokuNumberPanel.transform.position = Input.mousePosition;
+            _SurePanel.transform.position = Input.mousePosition;
         }
-        _SudokuNumberPanel.SetActive(true);
+        
         _LastSudokuBtn = go;
+
+        Text tempSudokuText = go.transform.FindChild("Text").GetComponent<Text>();
+        if (tempSudokuText.text != "")
+        {
+            if (tempSudokuText.color == _YesColor
+                || tempSudokuText.color == _NoColor)
+            {
+                    _SudokuNumberPanel.SetActive(true);
+            }
+            else
+            {
+                if (go.GetComponent<ItemIndex>().isRotation)
+                    _SudokuNumberPanel.SetActive(true);
+                else
+                    _SurePanel.SetActive(true);
+            }
+        }
+        else
+        {
+            _SudokuNumberPanel.SetActive(true);
+        }
     }
     #endregion
 
@@ -374,6 +413,46 @@ public class SudokuManager : MonoBehaviour {
         }
 
         _SudokuNumberPanel.SetActive(false);
+
+        _iSteps++;
+        _fPercent = CheckFinish() * 100.0f;
+
+        _StepText.text = _iSteps + "steps\n" + (int)_fPercent + "%";
+
+        _LastSudokuBtn = null;
+
+        if ((int)(_fPercent) == 100)
+        {
+            ShowGameOverPanel();
+        }
+    }
+    #endregion
+
+    #region 点击确认按钮
+    void ClickSureBtn(GameObject go)
+    {
+        if (!_AudioSource.isPlaying)
+            _AudioSource.Play();
+
+        if (_LastSudokuBtn == null)
+            return;
+
+        switch (go.name)
+        {
+            case "Yes":
+                _LastSudokuBtn.transform.FindChild("Text").GetComponent<Text>().color = _YesColor;
+                break;
+            case "No":
+                _LastSudokuBtn.transform.FindChild("Text").GetComponent<Text>().color = _NoColor;
+                ItemIndex tempItemIndex = _LastSudokuBtn.GetComponent<ItemIndex>();
+                _SudokuInfor[tempItemIndex.X, tempItemIndex.Y].Num = 0;
+                break;
+
+            default:
+                break;
+        }
+
+        _SurePanel.SetActive(false);
 
         _iSteps++;
         _fPercent = CheckFinish() * 100.0f;

@@ -11,8 +11,6 @@ public class ItemIndex : MonoBehaviour {
     [HideInInspector]
     GameObject goText = null;
 
-    bool StartAnim = true;
-
     float fSpeed = 5.0f;
 
     void Start()

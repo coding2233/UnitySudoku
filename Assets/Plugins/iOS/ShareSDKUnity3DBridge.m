@@ -21,10 +21,10 @@
 #define __SHARESDK_WECHAT__
 #define __SHARESDK_QQ__
 #define __SHARESDK_SINA_WEIBO__
-#define __SHARESDK_RENREN__
-#define __SHARESDK_KAKAO__
-#define __SHARESDK_YIXIN__
-#define __SHARESDK_FACEBOOK_MSG__
+//#define __SHARESDK_RENREN__
+//#define __SHARESDK_KAKAO__
+//#define __SHARESDK_YIXIN__
+//#define __SHARESDK_FACEBOOK_MSG__
 
 #ifdef __SHARESDK_WECHAT__
 #import "WXApi.h"
@@ -39,21 +39,21 @@
 #import "WeiboSDK.h"
 #endif
 
-#ifdef __SHARESDK_RENREN__
-#import <RennSDK/RennSDK.h>
-#endif
+//#ifdef __SHARESDK_RENREN__
+//#import <RennSDK/RennSDK.h>
+//#endif
 
-#ifdef __SHARESDK_KAKAO__
-#import <KakaoOpenSDK/KakaoOpenSDK.h>
-#endif
+//#ifdef __SHARESDK_KAKAO__
+//#import <KakaoOpenSDK/KakaoOpenSDK.h>
+//#endif
 
-#ifdef __SHARESDK_YIXIN__
-#import "YXApi.h"
-#endif
+//#ifdef __SHARESDK_YIXIN__
+//#import "YXApi.h"
+//#endif
 
-#ifdef __SHARESDK_FACEBOOK_MSG__
-#import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
-#endif
+//#ifdef __SHARESDK_FACEBOOK_MSG__
+//#import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
+//#endif
 
 
 static UIView *_refView = nil;

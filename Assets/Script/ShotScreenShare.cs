@@ -11,7 +11,7 @@ public class ShotScreenShare : MonoBehaviour {
 
     public Button ShareButton;
     public SudokuManager _SudokuManager;
-
+    
     // Use this for initialization
     void Start () {
         ssdk = gameObject.GetComponent<ShareSDK>();
@@ -51,7 +51,8 @@ public class ShotScreenShare : MonoBehaviour {
 
     IEnumerator GetTexShare()
     {
-        _Path = Application.persistentDataPath + "/shotscreen.png";
+        if(_Path=="")
+            _Path = Application.persistentDataPath + "/shotscreen.png";
 
         yield return new WaitForEndOfFrame();
 
